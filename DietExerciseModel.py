@@ -10,23 +10,17 @@ import matplotlib.pyplot as plot
 timepoints = []
 wpoints = []
 
-
-rate = 0.5
-
-
 dt = 1 # timestep
 
 # initialization
 time = 0
-weight = 150
-
 dw = 0
 
 
 age = float(input("Please enter your age:"))
 gender = input("Please enter your gender (m,f):")
 height = float(input("Please enter your height (inches):"))
-weight0 = float(input("Please enter your weight (lbs):"))
+weight = float(input("Please enter your weight (lbs):"))
 
 exerciseLevel = int(input("Please enter the level of exercise you would like to model (1-5)\n1. sedentary (little or no exercise)\n2. lightly active (light exercise/sports 1-3 days/week)\n3. moderately active (moderate exercise/sports 3-5 days/week)\n4. very active (hard exercise/sports 6-7 days a week)\n5. extra active (very hard exercise/sports & physical job or 2x training)\n:"))
 
@@ -41,9 +35,9 @@ totalTime = 30 * int(input("Please enter how many months you would like to model
 
 BMR = 0
 if (gender == 'm'):
-    BMR = 66 + (6.23*weight0) + (12.7*height) - (6.8*age)
+    BMR = 66 + (6.23*weight) + (12.7*height) - (6.8*age)
 else:
-    BMR = 655 + (4.35*weight0) + (4.7*height) - (4.7*age)
+    BMR = 655 + (4.35*weight) + (4.7*height) - (4.7*age)
     
 print("\n\nYour Basal Metabolic Rate (BMR) is:",int(BMR),"calories")
 
@@ -106,7 +100,10 @@ while time < totalTime: # run for alloted time
   wpoints.append(weight)
   timepoints.append(time)
   
- 
+print("\nA healthy amount of week to lose per week is about 1-2 pounds.")
+print("According to this model, you would lose about%6.2f lbs per week." %(dw*-7))
+
+
 plot.xlabel('Time (days)')
 plot.ylabel('Weight (lb)')
 plot.plot(timepoints,wpoints)
