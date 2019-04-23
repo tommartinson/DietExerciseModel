@@ -23,26 +23,73 @@ weight = 150
 dw = 0
 
 
-age = input("Please enter your age:")
-gender = input("Please enter your gender (M,F):")
-height = input("Please enter your height (inches):")
-weight0 = input("Please enter your weight (lbs):")
+age = float(input("Please enter your age:"))
+gender = input("Please enter your gender (m,f):")
+height = float(input("Please enter your height (inches):"))
+weight0 = float(input("Please enter your weight (lbs):"))
 
-exerciseLevel = input("Please enter the level of exercise you would like to model (1-5)\n1. sedentary (little or no exercise)\n2. lightly active (light exercise/sports 1-3 days/week)\n3. moderately active (moderate exercise/sports 3-5 days/week)\n4. very active (hard exercise/sports 6-7 days a week)\n5. extra active (very hard exercise/sports & physical job or 2x training)\n:")
+exerciseLevel = int(input("Please enter the level of exercise you would like to model (1-5)\n1. sedentary (little or no exercise)\n2. lightly active (light exercise/sports 1-3 days/week)\n3. moderately active (moderate exercise/sports 3-5 days/week)\n4. very active (hard exercise/sports 6-7 days a week)\n5. extra active (very hard exercise/sports & physical job or 2x training)\n:"))
 
-deficitPercent = input("Please enter the % caloric deficit you would like to model (1-4)\n1. 5% below maintenance level\n2. 10% below maintenance level\n3. 15% below maintenance level\n4. 20% below maintenance level \n:")
+deficitPercent = float(input("Please enter the % caloric deficit you would like to model:"))
 
-totalTime = 30 * int(input("How many months would you like to model this diet for?"))
+totalTime = 30 * int(input("Please enter how many months you would like to model this diet for:"))
+
+
+# Basal Metabolic Rate Calculation
+# Men: BMR = 66 + (6.23 x weight in pounds) + (12.7 x height in inches) - (6.8 x age in years)
+# Women: BMR = 655 + (4.35 x weight in pounds) + (4.7 x height in inches) - (4.7 x age in years)
+
+BMR = 0
+if (gender == 'm'):
+    BMR = 66 + (6.23*weight0) + (12.7*height) - (6.8*age)
+else:
+    BMR = 655 + (4.35*weight0) + (4.7*height) - (4.7*age)
+    
+print("\n\nYour Basal Metabolic Rate (BMR) is:",int(BMR),"calories")
+
+# Calculate BMR and Exercise Total
+if (exerciseLevel == 1):
+    BMR = BMR*1.2
+elif(exerciseLevel == 2):
+    BMR = BMR*1.375
+elif(exerciseLevel == 3):
+    BMR = BMR*1.55
+elif(exerciseLevel == 4):
+    BMR = BMR*1.725
+else:
+    BMR = BMR*1.9
+
+print("Your BMR + calories burned from exercise is:",int(BMR),"calories" )
+print("This is the amount of calories you should be eating each day to stay at your same weight.")
+
+
+# Caloric Deficit Calculations
+
+deficit = deficitPercent/100
+print("Eating at a",deficitPercent,"% caloric deficit would mean eating",int(BMR*deficit),"less calories per day.")
+print("Therefore, you would be eating,",(int)(BMR-BMR*deficit),"calories per day.")
+print("This is what your change in weight would look like over time.")
+
+# Calculating actual weight change
+# 3500 calories = 1 lb of fat
+netCalsLost = BMR*deficit
+netWeightLost = netCalsLost/3500
 
 # print output header and starting values
-print ("  Time  Weight   Change")
-print ("%6.2f  %6.2f%6.2f " % (time, weight, dw))
+print ("  \nTime  Weight   Change")
+print ("%6.2f  %6.2f %6.2f " % (time, weight, dw))
 
 
 # integration time loop
-while time < totalTime: # run until a troop is eliminated
-  # compute derivatives
-  dw = -rate  # x attrition rate
+while time < totalTime: # run for alloted time 
+    # total caloric deficit = amount of calories taken in through food and 
+    # subtract the amount of calories burned from working out and the amount 
+    # of calories burned from the RMR.
+    # caloric deficit = food - (workoutCals + RMRCals)
+    # 3500 calories = 1 lb of fat
+    
+    # compute derivatives
+  dw = -netWeightLost  # x attrition rate
   
   # increment time
   time += dt # time = time+ dt
@@ -55,7 +102,7 @@ while time < totalTime: # run until a troop is eliminated
     break # stop looping
   
   
-  print ("%6.2f  %6.2f  %6.2f " % (time, weight, dw))
+  print ("%6.2f  %6.2f %6.2f " % (time, weight, dw))
   wpoints.append(weight)
   timepoints.append(time)
   
@@ -63,7 +110,6 @@ while time < totalTime: # run until a troop is eliminated
 plot.xlabel('Time (days)')
 plot.ylabel('Weight (lb)')
 plot.plot(timepoints,wpoints)
-plot.legend(loc='upper center')
 plot.show()
 plot.savefig('output.png')
 
