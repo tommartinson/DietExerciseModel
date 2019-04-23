@@ -8,8 +8,7 @@
 import matplotlib.pyplot as plot
 
 timepoints = []
-xpoints = []
-ypoints = []
+wpoints = []
 
 
 rate = 0.5
@@ -19,9 +18,9 @@ dt = 1 # timestep
 
 # initialization
 time = 0
-x = 10000
+weight = 150
 
-dx = 0
+dw = 0
 
 
 age = input("Please enter your age:")
@@ -37,30 +36,33 @@ totalTime = 30 * int(input("How many months would you like to model this diet fo
 
 # print output header and starting values
 print ("  Time  Weight   Change")
-print ("%6.2f  %6.2f%6.2f " % (time, x, dx))
+print ("%6.2f  %6.2f%6.2f " % (time, weight, dw))
 
 
 # integration time loop
 while time < totalTime: # run until a troop is eliminated
   # compute derivatives
-  dx = -rate  # x attrition rate
+  dw = -rate  # x attrition rate
   
   # increment time
   time += dt # time = time+ dt
   # update troop state variables
-  x += dx # x = x + dx*dt
-  if(x<0):
-    x = 0
+  weight += dw # calculate new weight
   
   
-  print ("%6.2f  %6.2f  %6.2f " % (time, x, dx*dt))
-  xpoints.append(x)
+  if(weight<0): # edge case to prevent errors
+    weight = 0
+    break # stop looping
+  
+  
+  print ("%6.2f  %6.2f  %6.2f " % (time, weight, dw))
+  wpoints.append(weight)
   timepoints.append(time)
   
  
 plot.xlabel('Time (days)')
 plot.ylabel('Weight (lb)')
-plot.plot(timepoints,xpoints)
+plot.plot(timepoints,wpoints)
 plot.legend(loc='upper center')
 plot.show()
 plot.savefig('output.png')
