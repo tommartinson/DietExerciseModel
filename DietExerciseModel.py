@@ -1,7 +1,4 @@
 # Thomas Martinson
-# 818755425
-# CS558
-# Madachy
 # Diet and Exercise Model
 
 # import numpy as np
